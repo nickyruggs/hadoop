@@ -18,18 +18,20 @@
 #  Version History:
 #             v. 0.91      3/28/15         Initial Version
 #             v. 0.92      8/4/15          input defaults updated
+#             v. 0.93      4/21/16         removed dist parameter, and force add of supergroup
+#
 #
 use strict;
 use Getopt::Long;
 #
 #   input section
 #
-my $passwd="passwd";              # local file name
-my $group="group";                # local file name of /etc/group
+my $passwd="";              # local file name
+my $group="";                # local file name of /etc/group
 my $isi_cmds="isi_commands.txt";  # Output file for the isi commands
 my $zone="system";                      # Access zone on the isilon system for this hadoop
 my $hdfs_root="/ifs/";            # HDFS Root for the above access zone
-my $dist="cdh";                   # Hadoop Distribution  - cdh|hwx|phd
+#my $dist="";                   # Hadoop Distribution  - cdh|hwx|phd|ibm
 #
 #
 #  Variable declaration
@@ -48,44 +50,34 @@ my @file;
 #  for getopt
 #
 my $help=0;
-my $version="0.1";
+my $version="0.93";
 #
 GetOptions ('passwd=s' => \$passwd, 
 	    'group=s' => \$group, 
 	    'hdfs_root=s' => \$hdfs_root, 
 	    'zone=s' => \$zone, 
-	    'dist=s' =>\$dist,
 	    'help' => \$help);
 if ($help) {
     print "\nTo the rescue...BTW, this is version $version\n\n";
-    print "Usage: parse_passwd.pl --passwd <filename> --group <filename> --hdfs_root <hdfs root directory> --zone <access zone>  --dist cdh|hwx|phd\n\n";
+    print "Usage: parse_passwd.pl --passwd <filename> --group <filename> --hdfs_root <hdfs root directory> --zone <access zone> \n\n";
     exit;
 }
 #
 #  Okie dokie here we go....
 #
 print "...and begin\n";
-print "passwd file $passwd\n";
-print "group file $group\n";
-print "Using Access Zone: $zone with HDFS_ROOT set to $hdfs_root\n";
-print "The distribution is: $dist\n\n";
-if ($dist =~ /cdh/) { 
-    $got_super = "FALSE";
-}
+print "passwd file \t$passwd\n";
+print "group file  \t$group\n";
+print "Using Access Zone: \t$zone\nHDFS_ROOT set to \t$hdfs_root\n";
 #
 #   First do the groups they need to exist before the users
 #
-open (CMD,$group) || die "ERROR opening $group <$!>";
+open (CMD,$group) || die "Problem with the group file. Error $!\n";
 while (<CMD>) {
     chomp;
     ($grpname,$p,$gid,$users)= split /\:/,$_;
     print "Group: $grpname,\t\tGID: $gid,\tusers: $users\n";
     if ($grpname) {
-	if (  $dist =~ /cdh/ ) {  # only valid for Cloudera
-	    if ( $grpname =~ /supergroup/)   { 
-		$got_super = "TRUE";
-	    }
-	}
 	push @commands ,"isi auth groups create $grpname --gid $gid  --provider local --zone $zone\n" ;
     }
 #
@@ -129,7 +121,7 @@ foreach (@file) {
     print OUT $_   ;
 }
 #
-@file = grep (/users/, @commands);
+@file = grep (/users create/, @commands);
 foreach (@file) { 
     print OUT $_   ;
 }
@@ -137,14 +129,5 @@ foreach (@file) {
 @file = grep (/groups modify/, @commands);
 foreach (@file) { 
     print OUT $_   ;
-}
-print "hmmm <$dist> ...  <$got_super>\n";
-unless ( $got_super =~ /TRUE/  ) {
-    print "Warning: supergroup not found, adding it anyway.\nChoosing gid 999999, you really should change this!\n";
-    print OUT "############## WARNING: manual addition below ###################\n";
-    print OUT "isi auth groups create supergroup --gid 999999  --provider local --zone $zone\n";
-    print OUT "isi auth groups modify supergroup --add-user hdfs --provider local --zone $zone\n";
-    print OUT "isi auth groups modify supergroup --add-user mapred --provider local --zone $zone\n";
-    print OUT "isi auth groups modify supergroup --add-user yarn --provider local --zone $zone\n";
 }
 close OUT;
