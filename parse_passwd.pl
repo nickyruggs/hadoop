@@ -20,6 +20,8 @@
 #                                         fixed issue with modify groups coming before 
 #                                         the user was created.
 #
+#              v1.2       3/24/2022       Mod directory structure for CDP
+#
 use strict;
 use Getopt::Long;
 #
@@ -30,7 +32,7 @@ my $group="group";                # local file name of /etc/group
 my $isi_cmds="isi_commands.txt";  # Output file for the isi commands
 my $zone="";                      # Access zone on the isilon system for this hadoop cluster
 my $hdfs_root="/ifs/";            # HDFS Root for the above access zone 
-my $dist="cdh";                   # Hadoop Distribution  - cdh|hwx|phd
+my $dist="cdh";                   # Hadoop Distribution  - cdh|hwx|cdp
 #
 #
 #  Variable declaration
@@ -76,7 +78,7 @@ if ($dist =~ /cdh/) {
     $got_super = "FALSE";
 }
 #
-#   First do the groups they need to exist before the users
+#   First do the groups, they need to exist before the users
 #
 open (CMD,$group) || die "ERROR opening $group <$!>";
 while (<CMD>) {
@@ -147,8 +149,8 @@ if ($dist =~ /hdp/) {
 # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
 #
 cd $hdfs_root
-chmod 755 $hdfs_root
-chown hdfs:hadoop $hdfs_root
+chmod 755 .
+chown hdfs:hadoop .
 mkdir -p -m 1777 app-logs
 chown yarn:hadoop app-logs
 mkdir -p -m 770  app-logs/ambari-qa
@@ -202,6 +204,139 @@ chmod 700 user/hive
 chmod 755 user/hue
 chmod 775 user/oozie
 chmod 755 user/yarn
+EOF
+}
+if ($dist =~ /cdh/) { 
+    print OUT <<EOF;
+    #
+    # now do the directories...
+    # start in hdfs_root, $hdfs_root
+    # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
+    #
+    cd $hdfs_root
+	chmod 755 .
+	chown hdfs:hadoop .
+	mkdir -p -m 755 hbase
+	chown hbase:hbase hbase
+	mkdir -p -m 755 solr
+	chown solr:solr solr
+	mkdir -p -m 1777 tmp
+	chown hdfs:supergroup tmp
+	mkdir -p -m 777 tmp/hive
+	chown hive:supergroup tmp/hive
+	mkdir -p -m 1777 tmp/logs
+	chown mapred:hadoop tmp/logs
+	mkdir -p -m 755 user
+	chown hdfs:supergroup user
+	mkdir -p -m 775 user/flume
+	chown flume:flume user/flume
+	mkdir -p -m 755 user/hdfs
+	chown hdfs:hdfs user/hdfs
+	mkdir -p -m 777 user/history
+	chown mapred:hadoop user/history
+	mkdir -p -m 775 user/hive
+	chown hive:hive user/hive
+	mkdir -p -m 1777 user/hive/warehouse
+	chown hive:hive user/hive/warehouse
+	mkdir -p -m 755 user/hue
+	chown hue:hue user/hue
+	mkdir -p -m 777 user/hue/.cloudera_manager_hive_metastore_canary
+	chown hue:hue user/hue/.cloudera_manager_hive_metastore_canary
+	mkdir -p -m 775 user/impala
+	chown impala:impala user/impala
+	mkdir -p -m 775 user/oozie
+	chown oozie:oozie user/oozie
+	mkdir -p -m 751 user/spark
+	chown spark:spark user/spark
+	mkdir -p -m 1777 user/spark/applicationHistory
+	chown spark:spark user/spark user/spark/applicationHistory
+	mkdir -p -m 775 user/sqoop2
+	chown sqoop2:sqoop user/sqoop2
+	mkdir -p -m 755 user/yarn
+	chown yarn:yarn user/yarn
+EOF
+}
+if ($dist =~ /cdp/) { 
+    print OUT <<EOF;
+    #
+    # now do the directories...
+    # start in hdfs_root, $hdfs_root
+    # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
+    #
+    cd $hdfs_root
+	chmod 755 .
+	chown hdfs:hadoop .
+	mkdir -p -m 755 hbase
+	chown hbase:hbase hbase
+	mkdir -p -m 755 ranger/audit
+	chown -R hdfs:supergroup ranger
+	mkdir -p -m 755 solr
+	chown solr:solr solr
+	mkdir -p -m 1777 tmp
+	chown hdfs:supergroup tmp
+	mkdir -p -m 777 tmp/hive
+	chown hive:supergroup tmp/hive
+	mkdir -p -m 1777 tmp/logs
+	chown yarn:hadoop tmp/logs
+	mkdir -p -m 755 user
+	chown hdfs:supergroup user
+	mkdir -p -m 775 user/flume
+	chown flume:flume user/flume
+	mkdir -p -m 755 user/hdfs
+	chown hdfs:hdfs user/hdfs
+	mkdir -p -m 777 user/history
+	mkdir -p -m 1777 user/history/done_intermediate
+	chown -R mapred:hadoop user/history/done_intermediate
+	mkdir -p -m 775 user/hive
+	chown hive:hive user/hive
+	mkdir -p -m 1777 user/hive/warehouse
+	chown hive:hive user/hive/warehouse
+	mkdir -p -m 755 user/hue
+	chown hue:hue user/hue
+	mkdir -p -m 777 user/hue/.cloudera_manager_hive_metastore_canary
+	chown hue:hue user/hue/.cloudera_manager_hive_metastore_canary
+	mkdir -p -m 775 user/impala
+	chown impala:impala user/impala
+	mkdir -p -m 775 user/livy
+	chown livy:livy user/livy
+	mkdir -p -m 775 user/oozie
+	chown oozie:oozie user/oozie
+	mkdir -p -m 751 user/spark
+	chown spark:spark user/spark
+	mkdir -p -m 1777 user/spark/applicationHistory
+	chown spark:spark user/spark user/spark/applicationHistory
+	mkdir -p -m 1777 user/spark/driverLogs
+	chown spark:spark user/spark/driverLogs
+	mkdir -p -m 775 user/sqoop
+	chown sqoop:sqoop user/sqoop
+	mkdir -p -m 775 user/sqoop2
+	chown sqoop2:sqoop user/sqoop2
+	mkdir -p -m775 user/tez
+	chown hdfs:supergroup user/tez
+	mkdir -p -m 755 user/yarn
+	chown hdfs:supergroup user/yarn
+	mkdir -p -m 775 user/yarn/mapreduce
+	chown hdfs:supergroup user/yarn/mapreduce
+	mkdir -p -m 775 user/yarn/mapreduce/mr-framework
+	chown yarn:hadoop user/yarn/mapreduce/mr-framework
+	mkdir -p -m 775 user/yarn/services
+	chown hdfs:supergroup user/yarn/services
+	mkdir -p -m 775 user/yarn/services/service-framework
+	chown hdfs:supergroup user/yarn/services/service-framework
+	mkdir -p -m 775 user/zeppelin
+	chown zeppelin:zeppelin user/zeppelin
+	mkdir -p -m 775 warehouse
+	chown hdfs:supergroup warehouse
+	mkdir -p -m 775 warehouse/tablespace
+	chown hdfs:supergroup warehouse/tablespace
+	mkdir -p -m 775 warehouse/tablespace/external
+	chown hdfs:supergroup  warehouse/tablespace/external
+	mkdir -p -m 775 warehouse/tablespace/managed
+	chown hdfs:supergroup warehouse/tablespace/managed
+	mkdir -p -m 1775 warehouse/tablespace/external/hive
+	chown hive:hive warehouse/tablespace/external/hive
+	mkdir -p -m 1775 warehouse/tablespace/managed/hive
+	chown hive:hive  warehouse/tablespace/managed/hive
 EOF
 }
 close OUT;
