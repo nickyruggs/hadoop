@@ -16,9 +16,10 @@ This script will start with the passwd and group files from existing linux clien
 - **passwd** - This is the fliename, including path, if not in the cwd, of the passwd stub file.
 - **group** - This is the filename, including path if not in the cwd, of the group stub file.
 - **zone** - the name of the OneFS access zone being configured for Hadoop.
-- **hdfs_root** - this is the root of the hdfs directory structure as referenced from /ifs, it can be seen with the command ***isi hdfs settings view --zone <zone>*** where zone is the name of the Access zone being confgured.
+- **hdfs_root** - this is the root of the hdfs directory structure as referenced from /ifs, it can be seen with the command ***isi hdfs settings view --zone name*** where zone is the name of the Access zone being confgured.
 - **dist** - the distribution of Hadoop being configured, each distro has different list of users and directories.  For Apache use 'hdp'
 
-The script will create a shell script file called *isilon_*zone*_local_users.sh* to execute on PowerScale with the commands t ocreate users, groups and directory structure. 
+The script will create a shell script file called *isilon_*zone*_local_users.sh* to execute on PowerScale with the commands to create users, groups and directory structure. A best practice is to cut and paste the commands into your OneFS terminal there by reducing the chance for a cascade of errors.
+
 
 
