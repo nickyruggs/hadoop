@@ -21,6 +21,7 @@
 #                                         the user was created.
 #
 #              v1.2       3/24/2022       Mod directory structure for CDP
+#              v1.3       11/3/2022       Bug fixes for directory
 #
 use strict;
 use Getopt::Long;
@@ -63,7 +64,7 @@ $ier=GetOptions ('passwd=s' => \$passwd,
 	    'help' => \$help);
 #
 if ($help || $ier != 1 ) {
-    print "Usage: parse_passwd.pl --passwd <filename> --group <filename> --hdfs_root <hdfs root directory> --zone <access zone>  --dist cdh|hwx|phd\n\n";
+    print "Usage: parse_passwd.pl --passwd <filename> --group <filename> --hdfs_root <hdfs root directory> --zone <access zone>  --dist cdh|hwx|cdp\n\n";
     exit;
 }
 #
@@ -147,7 +148,8 @@ if ($dist =~ /hdp/) {
 # now do the directories...
 # start in hdfs_root, $hdfs_root
 # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
-#
+    #
+    isi_run -z $zone
 cd $hdfs_root
 chmod 755 .
 chown hdfs:hadoop .
@@ -213,6 +215,7 @@ if ($dist =~ /cdh/) {
     # start in hdfs_root, $hdfs_root
     # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
     #
+    isi_run -z $zone
     cd $hdfs_root
 	chmod 755 .
 	chown hdfs:hadoop .
@@ -263,6 +266,7 @@ if ($dist =~ /cdp/) {
     # start in hdfs_root, $hdfs_root
     # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
     #
+    isi_run -z $zone
     cd $hdfs_root
 	chmod 755 .
 	chown hdfs:hadoop .
@@ -286,7 +290,7 @@ if ($dist =~ /cdp/) {
 	chown hdfs:hdfs user/hdfs
 	mkdir -p -m 777 user/history
 	mkdir -p -m 1777 user/history/done_intermediate
-	chown -R mapred:hadoop user/history/done_intermediate
+	chown -R mapred:hadoop user/history
 	mkdir -p -m 775 user/hive
 	chown hive:hive user/hive
 	mkdir -p -m 1777 user/hive/warehouse
