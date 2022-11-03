@@ -150,6 +150,24 @@ if ($dist =~ /hdp/) {
 # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
     #
     isi_run -z $zone
+isi hdfs proxyusers create flume --zone $zone
+isi hdfs proxyusers modify flume --zone $zone --add-group hadoop
+isi hdfs proxyusers create hdfs --zone $zone
+isi hdfs proxyusers modify hdfs --zone $zone --add-group hadoop
+isi hdfs proxyusers create hive --zone $zone
+isi hdfs proxyusers modify hive --zone $zone --add-group hadoop 
+isi hdfs proxyusers create hue --zone $zone
+isi hdfs proxyusers modify hue --zone $zone --add-group hadoop 
+isi hdfs proxyusers create impala --zone $zone
+isi hdfs proxyusers modify impala --zone $zone --add-group hadoop 
+isi hdfs proxyusers create mapred --zone $zone
+isi hdfs proxyusers modify mapred --zone $zone --add-group hadoop 
+isi hdfs proxyusers create oozie --zone $zone
+isi hdfs proxyusers modify oozie --zone $zone --add-group hadoop 
+isi hdfs proxyusers create spark --zone $zone
+isi hdfs proxyusers modify spark --zone $zone --add-group hadoop 
+isi hdfs proxyusers create yarn --zone $zone
+isi hdfs proxyusers modify yarn --zone $zone --add-group hadoop 
 cd $hdfs_root
 chmod 755 .
 chown hdfs:hadoop .
@@ -216,6 +234,24 @@ if ($dist =~ /cdh/) {
     # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
     #
     isi_run -z $zone
+	isi hdfs proxyusers create flume --zone $zone
+	isi hdfs proxyusers modify flume --zone $zone --add-group hadoop
+	isi hdfs proxyusers create hdfs --zone $zone
+	isi hdfs proxyusers modify hdfs --zone $zone --add-group hadoop
+	isi hdfs proxyusers create hive --zone $zone
+	isi hdfs proxyusers modify hive --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create hue --zone $zone
+	isi hdfs proxyusers modify hue --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create impala --zone $zone
+	isi hdfs proxyusers modify impala --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create mapred --zone $zone
+	isi hdfs proxyusers modify mapred --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create oozie --zone $zone
+	isi hdfs proxyusers modify oozie --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create spark --zone $zone
+	isi hdfs proxyusers modify spark --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create yarn --zone $zone
+	isi hdfs proxyusers modify yarn --zone $zone --add-group hadoop 
     cd $hdfs_root
 	chmod 755 .
 	chown hdfs:hadoop .
@@ -267,6 +303,24 @@ if ($dist =~ /cdp/) {
     # also in order to use the identities use isi_run -z <zone id> prior to these next commands.
     #
     isi_run -z $zone
+	isi hdfs proxyusers create flume --zone $zone
+	isi hdfs proxyusers modify flume --zone $zone --add-group hadoop
+	isi hdfs proxyusers create hdfs --zone $zone
+	isi hdfs proxyusers modify hdfs --zone $zone --add-group hadoop
+	isi hdfs proxyusers create hive --zone $zone
+	isi hdfs proxyusers modify hive --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create hue --zone $zone
+	isi hdfs proxyusers modify hue --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create impala --zone $zone
+	isi hdfs proxyusers modify impala --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create mapred --zone $zone
+	isi hdfs proxyusers modify mapred --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create oozie --zone $zone
+	isi hdfs proxyusers modify oozie --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create spark --zone $zone
+	isi hdfs proxyusers modify spark --zone $zone --add-group hadoop 
+	isi hdfs proxyusers create yarn --zone $zone
+	isi hdfs proxyusers modify yarn --zone $zone --add-group hadoop 
     cd $hdfs_root
 	chmod 755 .
 	chown hdfs:hadoop .
