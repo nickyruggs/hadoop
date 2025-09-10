@@ -7,7 +7,7 @@ I have created this git to share my scripts with the commnuity that help integra
 >>Version 1.2 - Updated for CDP, creates directroy structure on PowerScale.
 
 > map_user.py - use this script to create mapping rules for the Cloudera Manager created accounts that use random strings in the SAMaccount name.  Currently hard coded to hive as that is the main offender be cause of impersonation.
-> OneFS-prep.txt - Usage notes for this script.
+>> OneFS-prep.txt - Usage notes for this script.
 
 ## Usage
 
