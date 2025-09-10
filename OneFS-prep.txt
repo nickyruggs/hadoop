@@ -1,0 +1,27 @@
+
+Setup Is a 2 step process:
+
+
+Creating the Role on powerscale in the correct Access Zone
+
+Adding the priv and the correct user to the Role.
+
+I think the correct user would be the clousera_scm user as this is the agent user for cloudera manager, 
+it also normally gets setup on the powerscale cluster during the initial create users script.
+Typically, this is done without passwords, but a password would be needed for this user in order to authenticate with powerscale
+
+Below are the OneFS commands to create the proper Role (assuming the user was already existing):
+
+isi auth roles create user-mapper --zone cdp
+isi auth roles modify user-mapper --zone cdp --add-priv=ISI_PRIV_LOGIN_PAPI
+isi auth roles modify user-mapper --zone cdp --add-priv-write=ISI_PRIV_PAPI_CONFIG
+isi auth roles modify user-mapper --zone cdp --add-priv-write=ISI_PRIV_AUTH
+isi auth roles modify user-mapper --zone cdp --add-user cloudera_scm
+
+
+Then usage of the script is straightforward:
+
+python map_user.py <FQDN> <AD Account> <target mapped account (hive)> <Access Zone>
+
+{it will prompt for the user and password}
+
