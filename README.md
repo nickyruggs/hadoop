@@ -6,8 +6,8 @@ I have created this git to share my scripts with the commnuity that help integra
 > parse_passwd.pl - use this to create the isilon commands to create users and directories from existing passwd and group files.
 >>Version 1.2 - Updated for CDP, creates directroy structure on PowerScale.
 
-> create_local_homedirs.sh - use this script to create the local directories that were in the passwd stub file from the isilon create users script.
->>Deprecated - PowerScale scripts provide this now.
+> map_user.py - use this script to create mapping rules for the Cloudera Manager created accounts that use random strings in the SAMaccount name.  Currently hard coded to hive as that is the main offender be cause of impersonation.
+> OneFS-prep.txt - Usage notes for this script.
 
 ## Usage
 
